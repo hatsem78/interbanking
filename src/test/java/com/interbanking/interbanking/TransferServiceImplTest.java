@@ -150,9 +150,6 @@ public class TransferServiceImplTest {
     @Test
     public void findByLastMonthTest(){
 
-        LocalDateTime beforeDate = SiteLocale.now("AR").minusDays(30).atStartOfDay();
-        System.out.println(beforeDate);
-
         Company company = new Company(
                 "2029745312",
                 "prueba",
@@ -160,12 +157,8 @@ public class TransferServiceImplTest {
         );
         company.setId(1L);
 
-        when(companyService.findById(company.getId())).thenReturn(Optional.of(company));
-
         Account account = new Account(EAccount.DEBIT_ACCOUNT);
         account.setId(1);
-
-        when(accountService.findByName(EAccount.DEBIT_ACCOUNT)).thenReturn(Optional.of(account));
 
         Calendar cal = Calendar.getInstance();
         cal.setTime(new Date());
