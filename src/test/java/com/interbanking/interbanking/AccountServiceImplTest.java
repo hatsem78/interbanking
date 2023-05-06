@@ -29,23 +29,24 @@ public class AccountServiceImplTest {
     @MockBean
     private IAccountRepository accountRepository;
 
+
     @Before
     public void setUp() throws Exception {
         this.accountService = Mockito.mock(AccountServiceImpl.class);
         this.accountRepository = Mockito.mock(IAccountRepository.class);
-
     }
 
     @Test
     public void whenValidName_thenAccountSave() {
 
-        when(accountRepository.save(any(Account.class))).then(new Answer<Account>(){
+        when(accountRepository.save(any(Account.class))).then(new Answer<Account>() {
             Integer secuencia = 8;
+
             @Override
             public Account answer(InvocationOnMock invocation) throws Throwable {
-                Account customer = invocation.getArgument(0);
-                customer.setId(secuencia++);
-                return customer;
+                Account account = invocation.getArgument(0);
+                account.setId(secuencia++);
+                return account;
             }
         });
 

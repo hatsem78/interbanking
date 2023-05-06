@@ -26,10 +26,55 @@ public class Transfer {
     @Column(name = "company_id")
     private Set<Company> companyId;
 
-    /*importe
-    cuenta(debito, credito)
-    fecha
-            id_empresa*/
+    public Transfer(
+            Account account,
+            Double amount,
+            Date transferDate,
+            Set<Company> companyId
+    ) {
+        this.account = account;
+        this.amount = amount;
+        this.transferDate = transferDate;
+        this.companyId = companyId;
+    }
 
+    public Long getId() {
+        return id;
+    }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
+    }
+
+    public Double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Double amount) {
+        this.amount = amount;
+    }
+
+    public Date getTransferDate() {
+        return transferDate;
+    }
+
+    public void setTransferDate(Date transferDate) {
+        this.transferDate = transferDate;
+    }
+
+    public Set<Company> getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(Set<Company> companyId) {
+        this.companyId = companyId;
+    }
 }
