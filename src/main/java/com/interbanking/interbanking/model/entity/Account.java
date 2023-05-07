@@ -14,6 +14,9 @@ public class Account {
     @Column(length = 20)
     private EAccount name;
 
+    public Account() {
+    }
+
     public Account(EAccount eAccount) {
         this.name = eAccount;
     }

@@ -12,19 +12,26 @@ public class MemberCompanies {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "member_companies")
-    @Column(name = "company_id")
-    private Set<Company> companyId;
+    @OneToMany
+    @JoinTable(
+            name="member_companies_company",
+            joinColumns = @JoinColumn( name="member_companies_id"),
+            inverseJoinColumns = @JoinColumn( name="company_id")
+    )
+    private Set<Company> company;
 
     @Column(name = "member_date")
     @Temporal(TemporalType.DATE)
     private Date memberDate;
 
+    public MemberCompanies() {
+    }
+
     public MemberCompanies(
             Set<Company> companyId,
             Date memberDate
     ) {
-        this.companyId = companyId;
+        this.company = companyId;
         this.memberDate = memberDate;
     }
 
@@ -36,12 +43,12 @@ public class MemberCompanies {
         this.id = id;
     }
 
-    public Set<Company> getCompanyId() {
-        return companyId;
+    public Set<Company> getCompany() {
+        return company;
     }
 
     public void setCompanyId(Set<Company> companyId) {
-        this.companyId = companyId;
+        this.company = company;
     }
 
     public Date getMemberDate() {

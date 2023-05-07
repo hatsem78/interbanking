@@ -22,9 +22,16 @@ public class Transfer {
     @Temporal(TemporalType.DATE)
     private Date transferDate;
 
-    @OneToMany(mappedBy="transfer")
-    @Column(name = "company_id")
+    @ManyToMany
+    @JoinTable(
+            name="transfer_company",
+            joinColumns = @JoinColumn( name="transfer_id"),
+            inverseJoinColumns = @JoinColumn( name="company_id")
+    )
     private Set<Company> companyId;
+
+    public Transfer() {
+    }
 
     public Transfer(
             Account account,

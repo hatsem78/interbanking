@@ -2,14 +2,18 @@ package com.interbanking.interbanking.model.service;
 
 import com.interbanking.interbanking.model.entity.Transfer;
 import com.interbanking.interbanking.model.repository.ITransferRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
+@Transactional
 public class TransferServiceImpl implements ITransfer {
 
     @Autowired
@@ -33,6 +37,11 @@ public class TransferServiceImpl implements ITransfer {
     @Override
     public List<Transfer> findByLastMonth(Date date) {
         return transferRepository.findByLastMonth(date);
+    }
+
+    @Override
+    public List<Transfer> findByAll() {
+        return transferRepository.findAll();
     }
 
 

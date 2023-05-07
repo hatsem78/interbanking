@@ -9,9 +9,9 @@ import java.util.Date;
 import java.util.List;
 
 public interface IMemberCompaniesRepository extends JpaRepository<MemberCompanies, Long> {
-    @Query(value="SELECT * " +
-            " FROM MemberCompanies " +
-            " WHERE MONTH(memberDate) = MONTH(:date) AND YEAR(memberDate) = YEAR(:date);"
+    @Query(value="SELECT mc " +
+            " FROM MemberCompanies mc" +
+            " WHERE MONTH(mc.memberDate) = MONTH(:date) AND YEAR(mc.memberDate) = YEAR(:date)"
     )
     List<MemberCompanies> findByLastMonth(@Param("date") Date date);
 }

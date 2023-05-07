@@ -14,9 +14,9 @@ public interface ITransferRepository extends JpaRepository<Transfer, Long> {
     Optional<Transfer> findByTransferDateAndCompanyId(Date transferDate, Long companyId);
     Optional<Transfer> findByTransferDate(Date transferDate);
 
-    @Query(value="SELECT * " +
-            " FROM Transfer " +
-            " WHERE MONTH(transferDate) = MONTH(:date) AND YEAR(transferDate) = YEAR(:date);"
+    @Query(value="SELECT t " +
+            " FROM Transfer t " +
+            " WHERE MONTH(t.transferDate) = MONTH(:date) AND YEAR(t.transferDate) = YEAR(:date)"
     )
     List<Transfer> findByLastMonth(@Param("date") Date date);
 

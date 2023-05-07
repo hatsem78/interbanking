@@ -14,6 +14,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.*;
 
+import static com.interbanking.interbanking.utils.SiteLocale.getLastMonth;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -100,12 +101,12 @@ public class MemberCompaniesServiceImplTest {
 
         MemberCompanies memberCompanies = new MemberCompanies(
                 Collections.singleton(company),
-                date
+                getLastMonth(1).getTime()
         );
 
         MemberCompanies memberCompanies1 = new MemberCompanies(
                 Collections.singleton(company1),
-                date
+                getLastMonth(1).getTime()
         );
 
         List<MemberCompanies> memberCompaniesList = new ArrayList<>();
@@ -117,7 +118,7 @@ public class MemberCompaniesServiceImplTest {
         cal.setTime(new Date());
         cal.add(Calendar.MONTH, -1);
 
-        when(memberCompaniesService.findByLastMonth(cal.getTime())).thenReturn(memberCompaniesList);
+        when(memberCompaniesService.findByLastMonth(getLastMonth(1).getTime())).thenReturn(memberCompaniesList);
 
         List<MemberCompanies> result = memberCompaniesService.findByLastMonth(cal.getTime());
 

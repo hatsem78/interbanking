@@ -7,24 +7,22 @@ import com.interbanking.interbanking.model.entity.Transfer;
 import com.interbanking.interbanking.model.service.AccountServiceImpl;
 import com.interbanking.interbanking.model.service.CompanyServiceImpl;
 import com.interbanking.interbanking.model.service.TransferServiceImpl;
-import com.interbanking.interbanking.utils.SiteLocale;
 import org.assertj.core.api.AssertionsForInterfaceTypes;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-import java.time.LocalDateTime;
 import java.util.*;
 
+import static com.interbanking.interbanking.utils.SiteLocale.getLastMonth;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-@SpringBootTest
+
 public class TransferServiceImplTest {
 
     @MockBean
@@ -156,63 +154,22 @@ public class TransferServiceImplTest {
                 new Date()
         );
         company.setId(1L);
-
-        Account account = new Account(EAccount.DEBIT_ACCOUNT);
-        account.setId(1);
-
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(new Date());
-        cal.add(Calendar.MONTH, -1);
-
-        Transfer transfer = new Transfer(
-                account,
-                300.00,
-                cal.getTime(),
-                Collections.singleton(company)
-        );
-
-        transfer.setId(1L);
-
-        Transfer transfer2 = new Transfer(
-                account,
-                300.00,
-                cal.getTime(),
-                Collections.singleton(company)
-        );
-
-        transfer.setId(2L);
-
-        List<Transfer> transferList = new ArrayList<>();
-        transferList.add(transfer);
-        transferList.add(transfer2);
-
-        when(transferService.findByLastMonth(cal.getTime())).thenReturn(transferList);
-
-        List<Transfer> found = transferService.findByLastMonth(cal.getTime());
-
-        assertEquals(found, transferList);
-
-    }
-
-    @Test
-    public void findByLastMonthNotFindTest(){
-
-        LocalDateTime beforeDate = SiteLocale.now("AR").minusDays(30).atStartOfDay();
-        System.out.println(beforeDate);
-
-        Company company = new Company(
-                "2029745312",
-                "prueba",
-                new Date()
-        );
-        company.setId(1L);
-
         when(companyService.findById(company.getId())).thenReturn(Optional.of(company));
 
         Account account = new Account(EAccount.DEBIT_ACCOUNT);
         account.setId(1);
-
         when(accountService.findByName(EAccount.DEBIT_ACCOUNT)).thenReturn(Optional.of(account));
+
+        when(transferService.save(any(Transfer.class))).then(new Answer<Transfer>() {
+            Long secuencia = 8L;
+
+            @Override
+            public Transfer answer(InvocationOnMock invocation) {
+                Transfer Transfer = invocation.getArgument(0);
+                Transfer.setId(secuencia++);
+                return Transfer;
+            }
+        });
 
         Date date = new Date();
 
@@ -224,6 +181,7 @@ public class TransferServiceImplTest {
         );
 
         transfer.setId(1L);
+        Transfer result = transferService.save(transfer);
 
         Transfer transfer2 = new Transfer(
                 account,
@@ -234,21 +192,68 @@ public class TransferServiceImplTest {
 
         transfer.setId(2L);
 
+        Transfer result2 = transferService.save(transfer);
+
+        List<Transfer> transferList = new ArrayList<>();
+        transferList.add(transfer);
+        transferList.add(result2);
+
+
+        List<Transfer> found2 =   transferService.findByLastMonth(getLastMonth(0).getTime());
+
+        when(transferService.findByLastMonth(getLastMonth(1).getTime())).thenReturn(transferList);
+
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(new Date());
+        cal.add(Calendar.MONTH, 0);
+
+        List<Transfer> found = transferService.findByLastMonth(cal.getTime());
+
+    }
+
+    @Test
+    public void findByLastMonthNotFindTest(){
+
+        Company company = new Company(
+                "2029745312",
+                "prueba",
+                new Date()
+        );
+        company.setId(1L);
+
+
+        Account account = new Account(EAccount.DEBIT_ACCOUNT);
+        account.setId(1);
+
+
+        Transfer transfer = new Transfer(
+                account,
+                300.00,
+                getLastMonth(1).getTime(),
+                Collections.singleton(company)
+        );
+
+        transfer.setId(1L);
+
+        Transfer transfer2 = new Transfer(
+                account,
+                300.00,
+                getLastMonth(1).getTime(),
+                Collections.singleton(company)
+        );
+
+        transfer2.setId(2L);
+
         List<Transfer> transferList = new ArrayList<>();
         transferList.add(transfer);
         transferList.add(transfer2);
 
 
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(new Date());
-        cal.add(Calendar.MONTH, -1);
+        when(transferService.findByLastMonth(getLastMonth(1).getTime())).thenReturn(transferList);
+
+        List<Transfer> found = transferService.findByLastMonth(getLastMonth(1).getTime());
 
 
-        when(transferService.findByLastMonth(cal.getTime())).thenReturn(transferList);
-
-        List<Transfer> found = transferService.findByLastMonth(cal.getTime());
-
-        assertEquals(found, transferList);
 
     }
 

@@ -6,10 +6,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 public class SiteLocale {
 	
@@ -48,17 +45,6 @@ public class SiteLocale {
 		countryLocales.put("UY", new Locale("es", "UY"));
 		countryLocales.put("EC", new Locale("es", "EC"));
 		countryLocales.put("AR", new Locale("es", "AR"));
-
-		countrySites.put("MX", "24MX");
-		countrySites.put("VA", "VAMX");
-		countrySites.put("VE", "LLVE");
-		countrySites.put("PA", "CAPA");
-		countrySites.put("PE", "DVPE");
-		countrySites.put("BR", "IWBR");
-		countrySites.put("EC", "PLEC");
-		countrySites.put("AR", "ZPAR");
-		countrySites.put("UB", "UBPE");
-		countrySites.put("CM", "CMBR");
 	}
 	
 	public static LocalDate now(String site) {
@@ -108,9 +94,16 @@ public class SiteLocale {
 			return yesterday(site);
 		}
 	}
-	
 	public static String getSiteForCountry(String country) {
 		return countrySites.get(country);
+	}
+
+	public static Calendar getLastMonth(Integer month) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(new Date());
+		cal.add(Calendar.MONTH, -month);
+
+		return cal;
 	}
 	
 }

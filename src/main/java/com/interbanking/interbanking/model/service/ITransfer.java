@@ -10,7 +10,9 @@ public interface ITransfer {
     Transfer save(Transfer transfer);
     Optional<Transfer> findByDateToCompanyId(Date date, Long companyId);
     Optional<Transfer> findByDate(Date date);
-
     List<Transfer> findByLastMonth(Date date);
+
+    List<Transfer> findByAll();
+
 
 }

@@ -45,7 +45,7 @@ public class CompanyServiceImplTest {
         });
 
         Company company = new Company(
-                "2029745312",
+                "20297453124",
                 "prueba",
                 new Date()
         );

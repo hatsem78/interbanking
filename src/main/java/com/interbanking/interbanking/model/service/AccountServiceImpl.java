@@ -16,7 +16,6 @@ import java.util.Optional;
 @Service
 @Transactional
 public class AccountServiceImpl implements IAccount {
-
     @Autowired
     private IAccountRepository accountRepository;
 

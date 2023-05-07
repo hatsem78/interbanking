@@ -10,7 +10,12 @@ import java.util.Date;
 
 
 @Entity
-@Table(name = "company")
+@Table(
+        name = "company",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = "cuit"),
+        }
+)
 public class Company {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,10 +36,6 @@ public class Company {
     @Column(name = "accession_date")
     @Temporal(TemporalType.DATE)
     private Date accessionDate;
-
-    @ManyToOne
-    @JoinColumn(name="transfer_id", nullable=false)
-    private Transfer transfer;
 
     public Company() {
     }
