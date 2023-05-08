@@ -11,10 +11,13 @@ Datos de la empresa: Cuit, razón social, fecha adhesión
 Datos de la transferencia: importe, id empresa, cuenta débito, cuenta crédito
 Si falto algo asumirlo y cuando envías el texto comentar lo asumido-
 
+
 1.- se creó el endpoint:
 http://localhost:8080/api/companiesMadeTransfersLastMonth
 trae todas las empreas que hicieron trasferencia el último mes, ejemplo si estamos en mayo trae todos los
+
 movimientos de abril resultado:
+
 ---
     [
       {
