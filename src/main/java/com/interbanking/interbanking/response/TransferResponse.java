@@ -1,30 +1,22 @@
 package com.interbanking.interbanking.response;
 
-import java.util.Date;
-import java.util.stream.LongStream;
-import java.util.stream.Stream;
-
-public class TransferRequest {
+public class TransferResponse {
 
     private Long transferId;
     private Double amount;
     private String transferDate;
-    private LongStream companyId;
+    private CompanyResponse company;
 
-    private Stream<String> companyName;
-
-    public TransferRequest(
+    public TransferResponse(
             Long transferId,
             Double amount,
             String transferDate,
-            LongStream companyId,
-            Stream<String> companyName
+            CompanyResponse company
     ) {
         this.transferId = transferId;
         this.amount = amount;
         this.transferDate = transferDate;
-        this.companyId = companyId;
-        this.companyName = companyName;
+        this.company = company;
     }
 
     public Long getTransferId() {
@@ -50,20 +42,10 @@ public class TransferRequest {
     public void setTransferDate(String transferDate) {
         this.transferDate = transferDate;
     }
-
-    public LongStream getCompanyId() {
-        return companyId;
+    public CompanyResponse getCompany() {
+        return company;
     }
-
-    public void setCompanyId(LongStream companyId) {
-        this.companyId = companyId;
-    }
-
-    public Stream<String> getCompanyName() {
-        return companyName;
-    }
-
-    public void setCompanyName(Stream<String> companyName) {
-        this.companyName = companyName;
+    public void setCompany(CompanyResponse company) {
+        this.company = company;
     }
 }

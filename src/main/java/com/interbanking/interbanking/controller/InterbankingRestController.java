@@ -10,10 +10,7 @@ import com.interbanking.interbanking.model.service.CompanyServiceImpl;
 import com.interbanking.interbanking.model.service.MemberCompaniesServiceImpl;
 import com.interbanking.interbanking.model.service.TransferServiceImpl;
 import com.interbanking.interbanking.request.MemberCompanyRequest;
-import com.interbanking.interbanking.response.MemberCompaniesResponse;
-import com.interbanking.interbanking.response.MessageResponse;
-import com.interbanking.interbanking.response.ResponseRequest;
-import com.interbanking.interbanking.response.TransferRequest;
+import com.interbanking.interbanking.response.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -57,7 +54,7 @@ public class InterbankingRestController {
     }
 
     @GetMapping("/companiesMadeTransfersLastMonth")
-    public ResponseEntity<List<TransferRequest>> companiesMadeTransfersLastMonth() throws EntityNotFoundException {
+    public ResponseEntity<List<TransferResponse>> companiesMadeTransfersLastMonth() throws EntityNotFoundException {
 
         log.info("Customer Controller - companies Made Transfers Last Month ;");
 
@@ -80,22 +77,23 @@ public class InterbankingRestController {
             return responseEntitys;
         }
 
-        Stream<TransferRequest> transferStream = responseEntity.stream()
+        Stream<TransferResponse> transferStream = responseEntity.stream()
                 .map(transfer -> {
-                    TransferRequest transferRequest = new TransferRequest(
+                    CompanyResponse transferRequestCompany = new CompanyResponse(
+                            ((Company) transfer.getCompanyId().toArray()[0]).getId(),
+                            ((Company) transfer.getCompanyId().toArray()[0]).getBusinessName()
+                    );
+
+                    TransferResponse transferRequest = new TransferResponse(
                             transfer.getId(),
                             transfer.getAmount(),
                             transfer.getTransferDate().toString(),
-                            transfer.getCompanyId().stream().mapToLong(
-                                    Company::getId
-                            ),
-                            transfer.getCompanyId().stream().map(
-                                company-> { return company.getBusinessName();}
-                            )
+                            transferRequestCompany
+
                     );
                     return transferRequest;
                 });
-        List<TransferRequest> transferRequestList = transferStream.collect(Collectors.toList());
+        List<TransferResponse> transferRequestList = transferStream.collect(Collectors.toList());
 
         return new ResponseEntity<>(transferRequestList, HttpStatus.OK);
     }
@@ -120,14 +118,13 @@ public class InterbankingRestController {
 
         Stream<MemberCompaniesResponse> memberCompaniesResponseStream = responseEntity.stream()
                 .map(memberCompanies -> {
+                    CompanyResponse companyResponse = new CompanyResponse(
+                            ((Company) memberCompanies.getCompany().toArray()[0]).getId(),
+                            ((Company) memberCompanies.getCompany().toArray()[0]).getBusinessName()
+                    );
                     MemberCompaniesResponse transferRequest = new MemberCompaniesResponse(
                             memberCompanies.getMemberDate().toString(),
-                            memberCompanies.getCompany().stream().mapToLong(
-                                    Company::getId
-                            ),
-                            String.valueOf(memberCompanies.getCompany().stream().map(
-                                    company-> { return Stream.of(company.getBusinessName());}
-                            ))
+                            companyResponse
                     );
                     return transferRequest;
                 }).peek(System.out::println);

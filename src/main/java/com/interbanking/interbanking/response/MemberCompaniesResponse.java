@@ -6,18 +6,15 @@ import java.util.stream.LongStream;
 public class MemberCompaniesResponse {
 
     private String memberDate;
-    private LongStream companyId;
-
-    private String companyName;
+    private CompanyResponse company;
 
     public MemberCompaniesResponse(
             String memberDate,
-            LongStream companyId,
-            String companyName
+            CompanyResponse company
     ) {
         this.memberDate = memberDate;
-        this.companyId = companyId;
-        this.companyName = companyName;
+        this.company = company;
+
     }
 
     public String getMemberDate() {
@@ -28,19 +25,11 @@ public class MemberCompaniesResponse {
         this.memberDate = memberDate;
     }
 
-    public LongStream getCompanyId() {
-        return companyId;
+    public CompanyResponse getCompany() {
+        return company;
     }
 
-    public void setCompanyId(LongStream companyId) {
-        this.companyId = companyId;
-    }
-
-    public String getCompanyName() {
-        return companyName;
-    }
-
-    public void setCompanyName(String companyName) {
-        this.companyName = companyName;
+    public void setCompany(CompanyResponse company) {
+        this.company = company;
     }
 }

@@ -12,7 +12,7 @@ public class MemberCompanies {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany
+    @ManyToMany
     @JoinTable(
             name="member_companies_company",
             joinColumns = @JoinColumn( name="member_companies_id"),

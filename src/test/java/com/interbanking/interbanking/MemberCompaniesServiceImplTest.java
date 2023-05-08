@@ -83,8 +83,6 @@ public class MemberCompaniesServiceImplTest {
     @Test
     public void findByLastMonthTest() {
 
-        Date date = new Date();
-
         Company company = new Company(
                 "2029745312",
                 "prueba",

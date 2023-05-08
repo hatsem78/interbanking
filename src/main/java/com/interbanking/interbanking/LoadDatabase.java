@@ -1,10 +1,8 @@
 package com.interbanking.interbanking;
 
-import com.interbanking.interbanking.model.entity.Account;
-import com.interbanking.interbanking.model.entity.Company;
-import com.interbanking.interbanking.model.entity.EAccount;
-import com.interbanking.interbanking.model.entity.Transfer;
+import com.interbanking.interbanking.model.entity.*;
 import com.interbanking.interbanking.model.service.CompanyServiceImpl;
+import com.interbanking.interbanking.model.service.MemberCompaniesServiceImpl;
 import com.interbanking.interbanking.model.service.TransferServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +29,8 @@ class LoadDatabase {
     CommandLineRunner initDatabase(
             AccountServiceImpl accountService,
             CompanyServiceImpl companyService,
-            TransferServiceImpl transferService
+            TransferServiceImpl transferService,
+            MemberCompaniesServiceImpl memberCompaniesService
     ) {
         final Account debit = createAccountIfNotFound(accountService, EAccount.DEBIT_ACCOUNT);
         final Account credit = createAccountIfNotFound(accountService, EAccount.CREDIT_CCOUNT);
@@ -41,17 +40,37 @@ class LoadDatabase {
         final Company company3 = createCompanyIfNotFound(companyService, "20297453134", "prueba3", new Date());
         final Company company4 = createCompanyIfNotFound(companyService, "20297453144", "prueba4", new Date());
 
-        final Transfer transfer = createTransferIfNotFound(transferService, debit, 300.00, getLastMonth(1).getTime(), Collections.singleton(company));
-        final Transfer transfer1 = createTransferIfNotFound(transferService, debit, 1300.00, getLastMonth(1).getTime(), Collections.singleton(company2));
-        final Transfer transfer2 = createTransferIfNotFound(transferService, credit, 1500.00, getLastMonth(1).getTime(), Collections.singleton(company3));
-        final Transfer transfer3 = createTransferIfNotFound(transferService, debit, 3500.00, getLastMonth(1).getTime(), Collections.singleton(company4));
-        final Transfer transfer4 = createTransferIfNotFound(transferService, credit, 200.00, getLastMonth(1).getTime(), Collections.singleton(company));
+        final Transfer transfer = createTransfer(transferService, debit, 300.00, getLastMonth(1).getTime(), Collections.singleton(company));
+        final Transfer transfer1 = createTransfer(transferService, debit, 1300.00, getLastMonth(1).getTime(), Collections.singleton(company2));
+        final Transfer transfer2 = createTransfer(transferService, credit, 1500.00, getLastMonth(1).getTime(), Collections.singleton(company3));
+        final Transfer transfer3 = createTransfer(transferService, debit, 3500.00, getLastMonth(1).getTime(), Collections.singleton(company4));
+        final Transfer transfer4 = createTransfer(transferService, credit, 200.00, getLastMonth(1).getTime(), Collections.singleton(company));
+
+        final MemberCompanies memberCompanies = createMemberCompanies(memberCompaniesService, Collections.singleton(company),getLastMonth(1).getTime());
+        final MemberCompanies memberCompanies1 = createMemberCompanies(memberCompaniesService, Collections.singleton(company2),getLastMonth(1).getTime());
+        final MemberCompanies memberCompanies2 = createMemberCompanies(memberCompaniesService, Collections.singleton(company3),getLastMonth(1).getTime());
+        final MemberCompanies memberCompanies3 = createMemberCompanies(memberCompaniesService, Collections.singleton(company4),getLastMonth(1).getTime());
 
         return null;
     }
 
     @Transactional
-    Transfer createTransferIfNotFound(
+    MemberCompanies createMemberCompanies(
+            MemberCompaniesServiceImpl memberCompaniesService,
+            Set<Company> companyId,
+            Date memberDate
+    ) {
+        MemberCompanies memberCompanies = new MemberCompanies(
+                companyId,
+                memberDate
+        );
+        memberCompaniesService.save(memberCompanies);
+
+        return memberCompanies;
+    }
+
+    @Transactional
+    Transfer createTransfer(
             TransferServiceImpl transferService,
             Account account,
             Double amount,
@@ -65,7 +84,12 @@ class LoadDatabase {
     }
 
     @Transactional
-    Company createCompanyIfNotFound(CompanyServiceImpl companyService, String cuit, String businessName, Date date) {
+    Company createCompanyIfNotFound(
+            CompanyServiceImpl companyService,
+            String cuit,
+            String businessName,
+            Date date
+    ) {
         Company company = companyService.findByCuit(cuit).orElse(null);
         if (company == null) {
             company = new Company(cuit, businessName, date);
@@ -75,7 +99,10 @@ class LoadDatabase {
     }
 
     @Transactional
-    Account createAccountIfNotFound(AccountServiceImpl accountService, EAccount name) {
+    Account createAccountIfNotFound(
+            AccountServiceImpl accountService,
+            EAccount name
+    ) {
         Account account = accountService.findByName(name).orElse(null);
         if (account == null) {
             account = new Account(name);
