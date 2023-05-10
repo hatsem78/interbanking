@@ -42,7 +42,7 @@ movimientos de abril resultado:
 ---
 
 2.- Se creo el enpoint:
-http://localhost/companiesJoinedLastMonth
+[http://localhost/companiesJoinedLastMonth](http://localhost:8080/api/companiesJoinedLastMonth)
 Trae todas las empresas que se adhirieron en el último mes, ejemplo si estamos en mayo trae todos los
 movimientos de abril resultado:
 
